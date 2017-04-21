@@ -1,0 +1,66 @@
+1.创建Hibernate的配置文件
+ 连接数据库信息
+	connection.username
+	connection.password
+	connection.driver_class  
+		com.mysql.jdbc.Driver
+	connection.url
+		jdbc:mysql:///localhost:3306/hibernate5hi
+ Hibernate的配置信息
+	
+	dialect
+	show_sql
+	formate_sql
+	hbm2ddl.auto
+
+2.创建持久化类
+	News
+		id
+		title
+		author
+		date
+在配置文件中指定关联的 .hbm.xml文件
+mapping resource=路径
+
+3.创建对象关系-映射文件
+
+		id 指定主键的生成方式，native:使用数据库本地的方式
+
+4.通过Hibernate API编写访问数据的代码
+
+	创建SessionFactory
+		创建Configuration对象：对应hiberante的基本配置信息和对象关系映射信息
+			Configuration configuration = new Configuration().configure();
+		创建一个ServiceRegistry对象，hiberante 的任何配置和服务都需要在该对象中注册后才能生效。
+			ServiceRegistry serviceRegistry = 
+					new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+		创建SessionFactory
+			SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+	创建Session对象
+		Session session = sessionFactory.openSession();
+	开启事务
+		Transaction transaction = session.beginTransaction();
+	执行保存操作
+		News news = new News("java","ATGUIGU",new Date(new java.util.Date().getTime()));
+		session.save(news);
+	提交事务
+		transaction.commit();
+	关闭Session对象
+		session.close();
+	关闭SessionFactory对象
+		sessionFactory.close();
+
+
+错误代码
+
+1.
+<property name="hbm2dll.auto">update</property> =>correct code: <property name="hbm2ddl.auto">update</property>
+
+2.
+<property name="connection.url">jdbc:mysql:\\localhost:3306\hibernate-1</property> 
+=>correct code: <property name="connection.url">jdbc:mysql://localhost:3306/hibernate-1</property>
+
+
+
+
+参考：www.atguigu.com
